@@ -1,0 +1,8 @@
+#!/bin/bash
+retval="a"
+if [ -z "$(find ./databases/"$1"/ -maxdepth 0 -empty)" ]; then
+    ls -l ./databases/"$1"/.structure | cut -d" " -f9
+else
+    echo "No tables"
+    export retval=""
+fi

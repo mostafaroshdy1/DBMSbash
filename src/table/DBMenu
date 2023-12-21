@@ -1,0 +1,14 @@
+#!/bin/bash
+
+echo 1- Create Table
+echo 2- List Tables
+echo 3- Drop Table
+echo 4- Insert into Table
+echo 5- Select from Table
+echo 6- Delete from Table
+echo 7- Update Table
+echo 8- Back to main menu
+
+read -rp "Enter your choice: " REPLY
+export REPLY
+#echo "$REPLY"

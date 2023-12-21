@@ -1,0 +1,37 @@
+#!/bin/bash
+if [ ! -d "./databases/$1/.structure" ]; then
+    mkdir ./databases/"$1"/.structure
+
+fi
+read -rp "Enter table name: " tableName
+read -rp "Enter number of columns: " colNum
+if [[ $colNum =~ ^[0-9]+$ ]]; then
+    if [ ! -e ./databases/"$1"/.structure/"$tableName" ]; then
+        for ((i = 0; i < colNum; i++)); do
+            echo "#######   Column Number $i   #######"
+            if [ $i -eq 0 ]; then
+                echo "#######   This first column will be the primary Key   #######"
+                read -rp "Enter Column Data type (string - number) : " dataType
+                read -rp "Enter Column the Name : " name
+
+            else
+                {
+                    read -rp "Enter Column Data type (string - number) : " dataType
+                    read -rp "Enter Column the Name : " name
+                }
+            fi
+            if [[ "$dataType" != "number" && "$dataType" != "string" ]]; then
+                echo "Warrning : invalid Data type!"
+                rm ./databases/"$1"/.structure/"$tableName"
+                break
+            fi
+            echo "$((i + 1)) $dataType $name" >>"./databases/$1/.structure/$tableName"
+
+        done
+    else
+        echo Warrning : there is already table with the same name !
+        read -r -n 1
+    fi
+else
+    echo "Error: input must be number"
+fi

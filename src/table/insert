@@ -1,0 +1,50 @@
+#!/bin/bash
+read -rp "Enter Table Name: " tableName
+if [ -z "$tableName" ]; then
+    echo "Error: invalid table name"
+else
+    if [ -e "./databases/$1/.structure/$tableName" ]; then
+        # numCols=$(awk 'NR==1{print NF}' "./databases/$1/.structure/$tableName")
+        numCols=$(wc -l <"./databases/$1/.structure/$tableName")
+        error=0
+        for ((i = 1; i <= numCols; i++)); do
+            dataType=$(awk "NR==$i {print \$2; exit}" "./databases/$1/.structure/$tableName")
+            read -rp "Enter your input with Data Type ( $dataType ): " input
+
+            if [ $i -eq 1 ] && [ -z "$input" ]; then
+                echo "Primary Key (First Column) can't be empty"
+                error=1
+                break
+            fi
+            if { [ $i -eq 1 ] && cut -d " " -f 1 <"./databases/$1/$tableName" | grep -q "$input"; } >/dev/null 2>&1; then
+                echo "Primary Key must be unique"
+                error=1
+                break
+            fi
+            if [ "$dataType" = "number" ]; then
+                if [[ $input =~ ^[0-9]+$ ]]; then
+                    echo -n "$input " >>"./databases/$1/$tableName"
+                else
+                    echo "Warning: Data type does not match!"
+                    error=1
+                    break
+                fi
+            else ## data type is string
+                echo -n "$input " >>"./databases/$1/$tableName"
+            fi
+        done
+        # numRows=$(wc -l <"./databases/$1/$tableName")
+        numRows=$(($(wc -l <"./databases/$1/$tableName") + 1))
+
+        if [ $error -eq 0 ]; then
+            echo -n $(($(wc -l <"./databases/$1/$tableName") + 1)) >>"./databases/$1/$tableName" # adds row number at the end
+            echo "" >>"./databases/$1/$tableName"                                                # adds newline
+        fi
+        if [ $error -eq 1 ]; then
+            sed -i "${numRows}d" "./databases/$1/$tableName"
+        fi
+
+    else
+        echo "Warning: There is no table with that name."
+    fi
+fi

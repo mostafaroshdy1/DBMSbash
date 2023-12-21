@@ -1,0 +1,57 @@
+#!/bin/bash
+# shellcheck source=/dev/null
+val=false
+read -rp "Write the database name you want to connect: " dbName
+
+if [ -z "$dbName" ]; then
+    echo "You must enter a valid database name."
+elif [ -d "./databases/$dbName" ]; then
+    echo "Connecting....."
+    echo "Connected Successfully !!"
+    val=true
+
+else
+    echo "The database '$dbName' does not exist."
+fi
+
+while $val; do
+    clear
+    source ./src/table/DBMenu
+    if [ "$REPLY" -eq 1 ]; then
+        source ./src/table/createTable "$dbName"
+    elif [ "$REPLY" -eq 2 ]; then
+        source ./src/table/listTable "$dbName"
+    elif [ "$REPLY" -eq 3 ]; then
+        source ./src/table/listTable "$dbName"
+        if [ -n "$retval" ]; then
+            source ./src/table/dropTable "$dbName"
+        fi
+    elif [ "$REPLY" -eq 4 ]; then
+        source ./src/table/listTable "$dbName"
+        if [ -n "$retval" ]; then
+            source ./src/table/insert "$dbName"
+        fi
+    elif [ "$REPLY" -eq 5 ]; then
+        source ./src/table/listTable "$dbName"
+        if [ -n "$retval" ]; then
+            source ./src/table/select "$dbName"
+        fi
+    elif [ "$REPLY" -eq 6 ]; then
+        source ./src/table/listTable "$dbName"
+        if [ -n "$retval" ]; then
+            source ./src/table/delete "$dbName"
+        fi
+    elif [ "$REPLY" -eq 7 ]; then
+        source ./src/table/listTable "$dbName"
+        if [ -n "$retval" ]; then
+            source ./src/table/updateTable "$dbName"
+        fi
+    elif [ "$REPLY" -eq 8 ]; then
+        break
+    else
+        echo Options are only from 1 to 8
+    fi
+    echo Press Any key to continue
+    read -r -n 1
+
+done

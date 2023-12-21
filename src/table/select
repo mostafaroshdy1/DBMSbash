@@ -1,0 +1,80 @@
+#!/bin/bash
+read -r -p "Table Name: " tableName
+if [[ -z "$tableName" || ! -e "./databases/$1/.structure/$tableName" ]]; then
+    echo "Error: invalid table name"
+else
+    clear
+    echo Select by :
+    echo 1- Primary Key
+    echo 2- Row Number
+    echo 3- Show column by name
+    echo 4- Show column by number
+    echo 5- Show All table
+    echo 6- Back to table menu
+
+    #  numRows=$(wc -l <"./databases/$1/$tableName" 2>/dev/null)
+
+    numRows=$(wc -l 2>/dev/null <"./databases/$1/$tableName")
+    numCols=$(awk 'NR==1{print NF}' "./databases/$1/.structure/$tableName")
+    choice=1 #intialization to start the while loop
+    while [ "$choice" -ne 6 ]; do
+        read -r -p "Enter your choice: " choice
+        if [ "$choice" -eq 1 ]; then
+            read -r -p "Enter your Primary Key: " pKey
+            retval="NULL"
+            for ((i = 0; i <= numRows; i++)); do
+                primaryKey=$(head -n $i <"./databases/$1/$tableName" | tail -n 1 | cut -d " " -f1)
+                if [ "$primaryKey" == "$pKey" ]; then
+                    retval=$(head -n $i <"./databases/$1/$tableName" | tail -n 1)
+                    echo "$retval"
+                    break
+                fi
+            done
+
+        elif [ "$choice" -eq 2 ]; then
+            read -r -p "Enter your Row Number: " rowNum
+            retval="NULL"
+            for ((i = 0; i < numRows; i++)); do
+                row=$(head -n $i <"./databases/$1/$tableName" | tail -n 1 | rev | cut -d " " -f 1)
+                if [ "$row" == "$rowNum" ]; then
+                    retval=$(head -n $i <"./databases/$1/$tableName" | tail -n 1)
+                    echo "$retval"
+                    break
+                fi
+
+            done
+
+        elif [ "$choice" -eq 3 ]; then
+            read -r -p "Enter your Column Name: " colName
+            retval="NULL"
+            for ((i = 1; i <= numCols; i++)); do
+                name=$(head -n $i <"./databases/$1/.structure/$tableName" | tail -n 1 | cut -d " " -f 3)
+                if [ "$name" == "$colName" ]; then
+                    retval=$(cut -d " " -f $i <"./databases/$1/$tableName")
+                    echo "$retval"
+                    break
+                fi
+            done
+
+        elif [ "$choice" -eq 4 ]; then
+            read -r -p "Enter your Column Number: " colNum
+            retval="NULL"
+            for ((i = 1; i <= numCols; i++)); do
+                if [ "$i" == "$colNum" ]; then
+                    retval=$(cut -d " " -f $i <"./databases/$1/$tableName")
+                    echo "$retval"
+                    break
+                fi
+            done
+
+        elif [ "$choice" -eq 5 ]; then
+            if [[ -e "./databases/$1/.structure/$tableName" && ! -e "./databases/$1/$tableName" ]]; then
+                echo "Table is Empty !"
+            else
+                cat "./databases/$1/$tableName"
+            fi
+        else
+            retval="Error: Invalid Input"
+        fi
+    done
+fi

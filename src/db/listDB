@@ -1,0 +1,3 @@
+#!/bin/bash
+dbs="$(ls ./databases)"
+echo "$dbs"
