@@ -15,5 +15,4 @@ else
         fi
     done
     echo "$retval"
-
 fi

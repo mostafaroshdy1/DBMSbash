@@ -1,19 +1,15 @@
 #!/bin/bash
-# shellcheck source=/dev/null
 val=false
 read -rp "Write the database name you want to connect: " dbName
-
 if [ -z "$dbName" ]; then
     echo "You must enter a valid database name."
 elif [ -d "./databases/$dbName" ]; then
     echo "Connecting....."
     echo "Connected Successfully !!"
     val=true
-
 else
     echo "The database '$dbName' does not exist."
 fi
-
 while $val; do
     clear
     source ./src/table/DBMenu
@@ -53,5 +49,4 @@ while $val; do
     fi
     echo Press Any key to continue
     read -r -n 1
-
 done

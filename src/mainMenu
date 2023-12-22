@@ -1,5 +1,4 @@
 #!/bin/bash
-
 echo 1- Create Database
 echo 2- List Databases
 echo 3- Connect to Database
@@ -8,4 +7,3 @@ echo 5- Exit
 
 read -r -p "Enter your choice: " REPLY
 export REPLY
-#echo "$REPLY"

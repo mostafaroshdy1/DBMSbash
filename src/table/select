@@ -12,8 +12,6 @@ else
     echo 5- Show All table
     echo 6- Back to table menu
 
-    #  numRows=$(wc -l <"./databases/$1/$tableName" 2>/dev/null)
-
     numRows=$(wc -l 2>/dev/null <"./databases/$1/$tableName")
     numCols=$(awk 'NR==1{print NF}' "./databases/$1/.structure/$tableName")
     choice=1 #intialization to start the while loop
@@ -30,7 +28,6 @@ else
                     break
                 fi
             done
-
         elif [ "$choice" -eq 2 ]; then
             read -r -p "Enter your Row Number: " rowNum
             retval="NULL"
@@ -41,9 +38,7 @@ else
                     echo "$retval"
                     break
                 fi
-
             done
-
         elif [ "$choice" -eq 3 ]; then
             read -r -p "Enter your Column Name: " colName
             retval="NULL"
@@ -55,7 +50,6 @@ else
                     break
                 fi
             done
-
         elif [ "$choice" -eq 4 ]; then
             read -r -p "Enter your Column Number: " colNum
             retval="NULL"
@@ -66,7 +60,6 @@ else
                     break
                 fi
             done
-
         elif [ "$choice" -eq 5 ]; then
             if [[ -e "./databases/$1/.structure/$tableName" && ! -e "./databases/$1/$tableName" ]]; then
                 echo "Table is Empty !"

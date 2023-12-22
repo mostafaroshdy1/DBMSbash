@@ -1,5 +1,4 @@
 #!/bin/bash
-# shellcheck source=/dev/null
 while true; do
     clear
     source ./src/mainMenu
