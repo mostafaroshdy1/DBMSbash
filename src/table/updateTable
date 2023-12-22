@@ -21,7 +21,7 @@ if [ -z "$(find ./databases/"$1"/ -maxdepth 0 -empty)" ]; then
                 if [ -z "$input" ]; then
                     continue
                 fi
-                if [ $i -eq 1 ] && cut -d " " -f 1 <"./databases/$1/$tableName" | grep -q "$input"; then
+                if [ $i -eq 1 ] && cut -d " " -f 1 <"./databases/$1/$tableName" | grep -wq "$input"; then
                     echo "Primary Key must be unique"
                     break
                 fi

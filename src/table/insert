@@ -15,7 +15,7 @@ else
                 error=1
                 break
             fi
-            if { [ $i -eq 1 ] && cut -d " " -f 1 <"./databases/$1/$tableName" | grep -q "$input"; } >/dev/null 2>&1; then
+            if { [ $i -eq 1 ] && cut -d " " -f 1 <"./databases/$1/$tableName" | grep -wq "$input"; } >/dev/null 2>&1; then
                 echo "Primary Key must be unique"
                 error=1
                 break
