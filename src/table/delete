@@ -3,16 +3,20 @@ read -r -p "Table Name: " tableName
 if [ -z "$tableName" ]; then
     echo "Error: invalid table name"
 else
-    clear
-    numRows=$(wc -l <"./databases/$1/$tableName")
-    read -r -p "Enter your Primary Key: " pKey
-    retval="Primary Key Not Found"
-    for ((i = 0; i <= numRows; i++)); do
-        primaryKey=$(head -n $i <"./databases/$1/$tableName" | tail -n 1 | cut -d " " -f1)
-        if [ "$primaryKey" == "$pKey" ]; then
-            sed -i "${i}s/.*/ /" "./databases/$1/$tableName" # sed -i "${i}d" filename can be used but will affect the row numbers // later
-            retval="Deleted Successfully"
-        fi
-    done
-    echo "$retval"
+    if [ -f "./databases/$1/$tableName" ]; then
+        clear
+        numRows=$(wc -l <"./databases/$1/$tableName")
+        read -r -p "Enter your Primary Key: " pKey
+        retval="Primary Key Not Found"
+        for ((i = 0; i <= numRows; i++)); do
+            primaryKey=$(head -n $i <"./databases/$1/$tableName" | tail -n 1 | cut -d " " -f1)
+            if [ "$primaryKey" == "$pKey" ]; then
+                sed -i "${i}s/.*/ /" "./databases/$1/$tableName" # sed -i "${i}d" filename can be used but will affect the row numbers // later
+                retval="Deleted Successfully"
+            fi
+        done
+        echo "$retval"
+    else
+        echo "Does not exists"
+    fi
 fi
