@@ -1,0 +1,51 @@
+#!/bin/bash
+
+if [ -z "$(find ./databases/"$1"/ -maxdepth 0 -empty)" ]; then
+    read -rp "Table Name: " tableName
+    clear
+    numRows=$(wc -l <"./databases/$1/$tableName")
+    numCols=$(awk 'NR==1{print NF}' "./databases/$1/.structure/$tableName")
+
+    if [ -e "./databases/$1/$tableName" ]; then
+
+        read -r -p "Enter your Primary Key: " pKey
+        for ((j = 0; j <= numRows; j++)); do
+            primaryKey=$(head -n $j <"./databases/$1/$tableName" | tail -n 1 | cut -d " " -f1)
+            if [ "$primaryKey" == "$pKey" ]; then
+                oldRow=$(head -n $j <"./databases/$1/$tableName" | tail -n 1)
+                break
+            fi
+        done
+
+        for ((i = 1; i <= numCols; i++)); do # Fixed the loop range
+            dataType=$(awk "NR==$i {print \$2; exit}" "./databases/$1/.structure/$tableName")
+            read -rp "Enter your input with Data Type ( $dataType ) or press Enter for no change: " input
+            if [ -z "$input" ]; then
+                continue
+            fi
+            if [ $i -eq 1 ] && cut -d " " -f 1 <"./databases/$1/$tableName" | grep -q "$input"; then
+                echo "Primary Key must be unique"
+                break
+            fi
+
+            if [ "$dataType" = "number" ]; then
+                if [[ $input =~ ^[0-9]+$ ]]; then
+                    oldValue=$(echo "$oldRow" | cut -d " " -f $i)            # Fixed the syntax
+                    sed -i "s/$oldValue/$input/" "./databases/$1/$tableName" # Added -i for in-place editing
+                else
+                    echo "Warning: Data type does not match!"
+                    break
+                fi
+            else ## data type is string
+                oldValue=$(echo "$oldRow" | cut -d " " -f $i)
+                sed -i "s/$oldValue/$input/" "./databases/$1/$tableName"
+            fi
+        done
+
+    else
+        echo "Warning: There is no table with that name."
+    fi
+
+else
+    echo "No Data in Table Yet"
+fi

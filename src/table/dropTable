@@ -1,0 +1,15 @@
+#!/bin/bash
+read -rp "Enter the Name of the table: " tableName
+if [ -z "$tableName" ]; then
+    echo "Error: invalid table name"
+else
+    if [ -e "./databases/$1/.structure/$tableName" ]; then
+        rm "./databases/$1/.structure/$tableName"
+        if [ -e "./databases/$1/$tableName" ]; then
+            rm "./databases/$1/$tableName"
+        fi
+        echo "Table '$tableName' deleted successfully."
+    else
+        echo "Error: Table '$tableName' not found"
+    fi
+fi

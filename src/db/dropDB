@@ -1,0 +1,18 @@
+#!/bin/bash
+
+read -rp "Write the name of the database you want to delete: "
+input="$REPLY"
+
+if [ -z "$input" ]; then
+    echo "You must enter a valid database name."
+elif [ -d "./databases/$input" ]; then
+    read -rp "Are you sure you want to delete the database '$input'? (y/n): "
+    if [ "$REPLY" = "y" ]; then
+        rm -r "./databases/$input"
+        echo "Database '$input' is deleted successfully."
+    else
+        echo "Deletion canceled."
+    fi
+else
+    echo "The database '$input' does not exist."
+fi
