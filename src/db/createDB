@@ -6,10 +6,14 @@ if [ ! -d "./databases" ]; then
 fi
 
 dbpath="./databases/$dbname"
-
-if [ -e "$dbpath" ]; then
-   echo "Error: Database already exists."
+if [ -z "$dbname" ]; then
+   echo "Invalid Name"
 else
-   mkdir "$dbpath"
-   echo "The Database is created successfully."
+   if [ -e "$dbpath" ]; then
+      echo "Error: Database already exists."
+   else
+      mkdir "$dbpath"
+      echo "The Database is created successfully."
+   fi
 fi
+
