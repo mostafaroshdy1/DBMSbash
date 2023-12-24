@@ -38,7 +38,7 @@ The project is organized into the following directories:
 1. **Clone the repository to your local machine:**
 
    ```bash
-   https://github.com/mostafaroshdy1/bashDBMS.git
+   https://github.com/mostafaroshdy1/DBMSbash.git
    cd dbms-bash
    ```
 
